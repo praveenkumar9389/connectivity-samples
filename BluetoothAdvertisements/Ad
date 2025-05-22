@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoPulse | Air Quality & Safety Guide</title>
+    <style>
+        :root {
+            --sky-blue: #87CEEB;
+            --deep-blue: #1E90FF;
+            --white: #FFFFFF;
+            --light-gray: #F5F7FA;
+            --dark-gray: #333333;
+            --warning: #FF6B6B;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: var(--deep-blue);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        /* Split Layout */
+        .app-sections {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        @media (min-width: 768px) {
+            .app-sections {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* Pollution Dashboard */
+        .pollution-dashboard {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+        
+        .aqi-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .aqi-gauge {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--sky-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--white);
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 15px rgba(135, 206, 235, 0.4);
+        }
+        
+        .aqi-status {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--deep-blue);
+            margin-bottom: 10px;
+        }
+        
+        .aqi-description {
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .pollutants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .pollutant-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(135, 206, 235, 0.3);
+        }
+        
+        .pollutant-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--deep-blue);
+            display: flex;
+            align-items: center;
+        }
+        
+        .pollutant-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--deep-blue);
+        }
+        
+        .pollutant-desc {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        /* Safety Guide */
+        .safety-guide {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+        
+        .safety-guide h2 {
+            color: var(--deep-blue);
+            margin-top: 0;
+            border-bottom: 2px solid var(--sky-blue);
+            padding-bottom: 10px;
+        }
+        
+        .safety-tip {
+            background: rgba(135, 206, 235, 0.1);
+            border-left: 4px solid var(--sky-blue);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .safety-tip h3 {
+            margin-top: 0;
+            color: var(--deep-blue);
+        }
+        
+        .safety-tip ul {
+            padding-left: 20px;
+        }
+        
+        .safety-tip li {
+            margin-bottom: 8px;
+        }
+        
+        .vulnerable-alert {
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .vulnerable-alert h3 {
+            color: var(--warning);
+            margin-top: 0;
+        }
+        
+        /* Location Bar */
+        .location-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(135, 206, 235, 0.5);
+        }
+        
+        .location-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--deep-blue);
+        }
+        
+        .last-updated {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EcoPulse</h1>
+            <p class="subtitle">Air Quality & Safety Guide</p>
+        </header>
+        
+        <div class="app-sections">
+            <!-- SECTION 1: Pollution Dashboard -->
+            <div class="pollution-dashboard">
+                <div class="location-bar">
+                    <div class="location-name">📍 current location , india </div>
+                    <div class="last-updated">Updated: <span id="update-time">Just now</span></div>
+                </div>
+                
+                <div class="aqi-section">
+                    <div class="aqi-gauge" id="aqi-gauge">72</div>
+                    <div class="aqi-status" id="aqi-status">Good</div>
+                    <div class="aqi-description" id="aqi-description">
+                        Air quality is satisfactory, and air pollution poses little or no risk.
+                    </div>
+                </div>
+                
+                <h2>Pollutant Levels</h2>
+                <div class="pollutants-grid" id="pollutants-grid">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- SECTION 2: Safety Guide -->
+            <div class="safety-guide">
+                <h2>🛡️ Safety Guide</h2>
+                <p>Protect yourself based on current air quality:</p>
+                
+                <div class="safety-tip">
+                    <h3>😷 Mask Recommendations</h3>
+                    <ul id="mask-tips">
+                        <li>No mask needed for healthy individuals.</li>
+                        <li>Sensitive groups may use a cloth mask.</li>
+                    </ul>
+                </div>
+                
+                <div class="safety-tip">
+                    <h3>⏰ Best Time to Go Outside</h3>
+                    <ul id="time-tips">
+                        <li>Anytime is safe.</li>
+                        <li>Avoid rush hour if near traffic.</li>
+                    </ul>
+                </div>
+                
+                <div class="safety-tip">
+                    <h3>🏠 Indoor Air Safety</h3>
+                    <ul id="indoor-tips">
+                        <li>Keep windows open for ventilation.</li>
+                        <li>No air purifier needed unless sensitive.</li>
+                    </ul>
+                </div>
+                
+                <div class="vulnerable-alert" id="vulnerable-alert">
+                    <h3>⚠️ At-Risk Groups</h3>
+                    <p>No special precautions needed at this time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Pollution data
+        const pollutants = [
+            {
+                name: "PM2.5",
+                fullName: "Fine Particulate Matter",
+                unit: "µg/m³",
+                safeLevel: 12,
+                desc: "Tiny particles that penetrate deep into lungs.",
+                icon: "🌫️"
+            },
+            {
+                name: "PM10",
+                fullName: "Coarse Particulate Matter",
+                unit: "µg/m³",
+                safeLevel: 54,
+                desc: "Larger particles that irritate eyes and throat.",
+                icon: "💨"
+            },
+            {
+                name: "O₃",
+                fullName: "Ozone",
+                unit: "ppb",
+                safeLevel: 70,
+                desc: "Ground-level ozone harms lung function.",
+                icon: "☀️"
+            },
+            {
+                name: "NO₂",
+                fullName: "Nitrogen Dioxide",
+                unit: "ppb",
+                safeLevel: 53,
+                desc: "From vehicle emissions. Aggravates asthma.",
+                icon: "🚗"
+            },
+            {
+                name: "SO₂",
+                fullName: "Sulfur Dioxide",
+                unit: "ppb",
+                safeLevel: 75,
+                desc: "Causes acid rain and breathing issues.",
+                icon: "🏭"
+            },
+            {
+                name: "CO",
+                fullName: "Carbon Monoxide",
+                unit: "ppm",
+                safeLevel: 9,
+                desc: "Reduces oxygen delivery in blood.",
+                icon: "🔥"
+            }
+        ];
+        
+        // AQI Categories
+        const aqiCategories = [
+            { range: [0, 50], name: "Good", tip: "Ideal air quality for outdoor activities." },
+            { range: [51, 100], name: "Moderate", tip: "Sensitive individuals may experience minor effects." },
+            { range: [101, 150], name: "Unhealthy for Sensitive Groups", tip: "Children and asthma patients should limit outdoor time." },
+            { range: [151, 200], name: "Unhealthy", tip: "Everyone may experience health effects." },
+            { range: [201, 300], name: "Very Unhealthy", tip: "Health alert: Serious effects possible." },
+            { range: [301, 500], name: "Hazardous", tip: "Emergency conditions. Stay indoors." }
+        ];
+        
+        // Safety Tips
+        const safetyTips = {
+            maskTips: {
+                good: [
+                    "No mask needed for healthy individuals.",
+                    "Sensitive groups may use a cloth mask."
+                ],
+                moderate: [
+                    "Sensitive groups: Wear N95 outdoors.",
+                    "Others: Surgical mask in heavy traffic."
+                ],
+                unhealthy: [
+                    "Wear N95/KN95 masks outdoors.",
+                    "Children & elderly: Avoid going out unmasked."
+                ],
+                hazardous: [
+                    "Use respirators (N99/N100) if going outside.",
+                    "Seal masks properly for full protection."
+                ]
+            },
+            timeTips: {
+                good: [
+                    "Anytime is safe.",
+                    "Avoid rush hour near traffic."
+                ],
+                moderate: [
+                    "Best: Early morning or late evening.",
+                    "Avoid midday ozone peaks."
+                ],
+                unhealthy: [
+                    "Limit outdoor time to 30 mins max.",
+                    "Early morning has cleaner air."
+                ],
+                hazardous: [
+                    "Stay indoors as much as possible.",
+                    "If necessary, go out briefly after rain."
+                ]
+            },
+            indoorTips: {
+                good: [
+                    "Keep windows open for ventilation.",
+                    "No air purifier needed unless sensitive."
+                ],
+                moderate: [
+                    "Use air purifiers if you have allergies.",
+                    "Close windows during high traffic."
+                ],
+                unhealthy: [
+                    "Run HEPA air purifiers continuously.",
+                    "Keep windows and doors closed."
+                ],
+                hazardous: [
+                    "Seal windows and use air purifiers.",
+                    "Create a 'clean room' with filtered air."
+                ]
+            },
+            vulnerableAlert: {
+                good: "No special precautions needed at this time.",
+                moderate: "People with asthma or heart disease should monitor symptoms.",
+                unhealthy: "Children, elderly, and lung patients should stay indoors.",
+                hazardous: "🚨 High risk for all! Vulnerable groups should avoid all outdoor exposure."
+            }
+        };
+        
+        // DOM Elements
+        const aqiGauge = document.getElementById("aqi-gauge");
+        const aqiStatus = document.getElementById("aqi-status");
+        const aqiDescription = document.getElementById("aqi-description");
+        const updateTime = document.getElementById("update-time");
+        const pollutantsGrid = document.getElementById("pollutants-grid");
+        const maskTips = document.getElementById("mask-tips");
+        const timeTips = document.getElementById("time-tips");
+        const indoorTips = document.getElementById("indoor-tips");
+        const vulnerableAlert = document.getElementById("vulnerable-alert");
+        
+        // Render pollutant cards
+        function renderPollutants(data) {
+            pollutantsGrid.innerHTML = "";
+            data.forEach(pollutant => {
+                const card = document.createElement("div");
+                card.className = "pollutant-card";
+                
+                const isUnsafe = pollutant.value > pollutant.safeLevel;
+                
+                card.innerHTML = `
+                    <div class="pollutant-name">
+                        ${pollutant.icon} ${pollutant.name}
+                    </div>
+                    <div class="pollutant-value" style="color: ${isUnsafe ? "#FF6B6B" : "#1E90FF"}">
+                        ${pollutant.value} ${pollutant.unit}
+                    </div>
+                    <div class="pollutant-desc">
+                        ${pollutant.desc} 
+                        <br><small>Safe: ≤${pollutant.safeLevel} ${pollutant.unit}</small>
+                    </div>
+                `;
+                
+                pollutantsGrid.appendChild(card);
+            });
+        }
+        
+        // Update AQI Display
+        function updateAQI(aqi) {
+            aqiGauge.textContent = aqi;
+            
+            const category = aqiCategories.find(cat => 
+                aqi >= cat.range[0] && aqi <= cat.range[1]
+            );
+            
+            aqiStatus.textContent = category.name;
+            aqiDescription.textContent = category.tip;
+            
+            // Update Safety Tips
+            updateSafetyTips(aqi);
+        }
+        
+        // Update Safety Tips
+        function updateSafetyTips(aqi) {
+            let tipLevel = "good";
+            
+            if (aqi <= 50) tipLevel = "good";
+            else if (aqi <= 100) tipLevel = "moderate";
+            else if (aqi <= 200) tipLevel = "unhealthy";
+            else tipLevel = "hazardous";
+            
+            // Update Tips
+            maskTips.innerHTML = safetyTips.maskTips[tipLevel].map(tip => `<li>${tip}</li>`).join("");
+            timeTips.innerHTML = safetyTips.timeTips[tipLevel].map(tip => `<li>${tip}</li>`).join("");
+            indoorTips.innerHTML = safetyTips.indoorTips[tipLevel].map(tip => `<li>${tip}</li>`).join("");
+            
+            // Update Vulnerable Alert
+            vulnerableAlert.innerHTML = `
+                <h3>⚠️ At-Risk Groups</h3>
+                <p>${safetyTips.vulnerableAlert[tipLevel]}</p>
+            `;
+            
+            // Change alert color if unhealthy
+            vulnerableAlert.style.borderLeft = aqi > 100 ? "4px solid #FF6B6B" : "4px solid #87CEEB";
+            vulnerableAlert.style.background = aqi > 100 ? "rgba(255, 107, 107, 0.1)" : "rgba(135, 206, 235, 0.1)";
+        }
+        
+        // Simulate real-time data
+        function simulateRealTimeData() {
+            const aqi = Math.floor(Math.random() * 350);
+            updateAQI(aqi);
+            
+            const pollutantData = pollutants.map(p => ({
+                ...p,
+                value: Math.floor(Math.random() * (p.safeLevel * 2.5))
+            }));
+            
+            renderPollutants(pollutantData);
+            
+            const now = new Date();
+            updateTime.textContent = now.toLocaleTimeString();
+            
+            setTimeout(simulateRealTimeData, 5000);
+        }
+        
+        // Initialize
+        simulateRealTimeData();
+    </script>
+</body>
+</html>
